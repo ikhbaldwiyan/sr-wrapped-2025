@@ -6,7 +6,7 @@ import (
 )
 
 type WatchIDNService interface {
-	GetWatchIDN(userId string) ([]*models.WatchIDN, error)
+	GetWatchIDN(userId string) ([]*models.HistoryWatch, error)
 	GetMostWatched(userId string) (*models.User, []*models.MostWatchedMember, error)
 }
 
@@ -22,7 +22,7 @@ func NewWatchIDNService(repo repository.WatchIDNRepository, userRepo repository.
 	}
 }
 
-func (s *watchIDNService) GetWatchIDN(userId string) ([]*models.WatchIDN, error) {
+func (s *watchIDNService) GetWatchIDN(userId string) ([]*models.HistoryWatch, error) {
 	return s.repo.GetMostWatchIDN(userId)
 }
 

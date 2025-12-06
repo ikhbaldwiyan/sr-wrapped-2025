@@ -13,7 +13,7 @@ import (
 )
 
 type WatchIDNRepository interface {
-	GetMostWatchIDN(userID string) ([]*models.WatchIDN, error)
+	GetMostWatchIDN(userID string) ([]*models.HistoryWatch, error)
 	GetMostWatchedMembers(userID string) ([]*models.MostWatchedMember, error)
 }
 
@@ -23,8 +23,8 @@ func NewWatchIDNRepository() WatchIDNRepository {
 	return &watchIDNRepository{}
 }
 
-func (r *watchIDNRepository) GetMostWatchIDN(userId string) ([]*models.WatchIDN, error) {
-	var watchIDNs []*models.WatchIDN
+func (r *watchIDNRepository) GetMostWatchIDN(userId string) ([]*models.HistoryWatch, error) {
+	var watchIDNs []*models.HistoryWatch
 	objectId, err := primitive.ObjectIDFromHex(userId)
 
 	if err != nil {
@@ -54,7 +54,7 @@ func (r *watchIDNRepository) GetMostWatchIDN(userId string) ([]*models.WatchIDN,
 	defer cursor.Close(context.Background())
 
 	for cursor.Next(context.Background()) {
-		var watchIDN models.WatchIDN
+		var watchIDN models.HistoryWatch
 		if err := cursor.Decode(&watchIDN); err != nil {
 			return nil, err
 		}
