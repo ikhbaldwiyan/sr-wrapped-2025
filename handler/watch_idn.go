@@ -9,12 +9,11 @@ import (
 )
 
 type WatchIDNHandler struct {
-	service     service.WatchIDNService
-	userService service.UserService
+	service service.WatchIDNService
 }
 
-func NewWatchIDNHandler(service service.WatchIDNService, userService service.UserService) *WatchIDNHandler {
-	return &WatchIDNHandler{service: service, userService: userService}
+func NewWatchIDNHandler(service service.WatchIDNService) *WatchIDNHandler {
+	return &WatchIDNHandler{service: service}
 }
 
 type Response struct {
@@ -25,17 +24,14 @@ type Response struct {
 func (h *WatchIDNHandler) GetWatchIDN(c *gin.Context) {
 	userId := c.Param("user_id")
 
-	user, err := h.userService.GetUser(userId)
+	user, mostWatched, err := h.service.GetMostWatched(userId)
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
-		return
-	}
-
-	mostWatched, err := h.service.GetMostWatched(userId)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch most watched members"})
-
-		fmt.Println(err)
+		if user == nil {
+			c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+		} else {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch most watched members"})
+			fmt.Println(err)
+		}
 		return
 	}
 
@@ -43,5 +39,4 @@ func (h *WatchIDNHandler) GetWatchIDN(c *gin.Context) {
 		User: user,
 		Data: mostWatched,
 	})
-
 }

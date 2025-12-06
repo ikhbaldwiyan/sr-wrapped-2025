@@ -7,21 +7,35 @@ import (
 
 type WatchIDNService interface {
 	GetWatchIDN(userId string) ([]*models.WatchIDN, error)
-	GetMostWatched(userId string) ([]*models.MostWatchedMember, error)
+	GetMostWatched(userId string) (*models.User, []*models.MostWatchedMember, error)
 }
 
 type watchIDNService struct {
-	repo repository.WatchIDNRepository
+	repo     repository.WatchIDNRepository
+	userRepo repository.UserRepository
 }
 
-func NewWatchIDNService(repo repository.WatchIDNRepository) WatchIDNService {
-	return &watchIDNService{repo: repo}
+func NewWatchIDNService(repo repository.WatchIDNRepository, userRepo repository.UserRepository) WatchIDNService {
+	return &watchIDNService{
+		repo:     repo,
+		userRepo: userRepo,
+	}
 }
 
 func (s *watchIDNService) GetWatchIDN(userId string) ([]*models.WatchIDN, error) {
 	return s.repo.GetMostWatchIDN(userId)
 }
 
-func (s *watchIDNService) GetMostWatched(userId string) ([]*models.MostWatchedMember, error) {
-	return s.repo.GetMostWatchedMembers(userId)
+func (s *watchIDNService) GetMostWatched(userId string) (*models.User, []*models.MostWatchedMember, error) {
+	user, err := s.userRepo.GetUserByUserID(userId)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	mostWatched, err := s.repo.GetMostWatchedMembers(userId)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return user, mostWatched, nil
 }
