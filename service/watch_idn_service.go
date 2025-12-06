@@ -7,6 +7,7 @@ import (
 
 type WatchIDNService interface {
 	GetWatchIDN(userId string) ([]*models.WatchIDN, error)
+	GetMostWatched(userId string) ([]*models.MostWatchedMember, error)
 }
 
 type watchIDNService struct {
@@ -19,4 +20,8 @@ func NewWatchIDNService(repo repository.WatchIDNRepository) WatchIDNService {
 
 func (s *watchIDNService) GetWatchIDN(userId string) ([]*models.WatchIDN, error) {
 	return s.repo.GetMostWatchIDN(userId)
+}
+
+func (s *watchIDNService) GetMostWatched(userId string) ([]*models.MostWatchedMember, error) {
+	return s.repo.GetMostWatchedMembers(userId)
 }

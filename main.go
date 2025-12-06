@@ -20,11 +20,10 @@ func main() {
 
 	userRepo := repository.NewUserRepository()
 	userService := service.NewUserService(userRepo)
-	userHandler := handler.NewUserHandler(userService)
-
 	mostWatchIdnRepo := repository.NewWatchIDNRepository()
 	mostWatchIdnService := service.NewWatchIDNService(mostWatchIdnRepo)
-	mostWatchIdnHandler := handler.NewWatchIDNHandler(mostWatchIdnService)
+	userHandler := handler.NewUserHandler(userService)
+	mostWatchIdnHandler := handler.NewWatchIDNHandler(mostWatchIdnService, userService)
 
 	r := router.SetupRouter(userHandler, mostWatchIdnHandler)
 
