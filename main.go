@@ -22,7 +22,11 @@ func main() {
 	userService := service.NewUserService(userRepo)
 	userHandler := handler.NewUserHandler(userService)
 
-	r := router.SetupRouter(userHandler)
+	mostWatchIdnRepo := repository.NewWatchIDNRepository()
+	mostWatchIdnService := service.NewWatchIDNService(mostWatchIdnRepo)
+	mostWatchIdnHandler := handler.NewWatchIDNHandler(mostWatchIdnService)
+
+	r := router.SetupRouter(userHandler, mostWatchIdnHandler)
 
 	log.Println("Server running on port 8080")
 	r.Run(":8080")
