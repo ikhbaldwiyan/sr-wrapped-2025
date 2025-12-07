@@ -10,7 +10,7 @@ import (
 )
 
 type UserRepository interface {
-	GetUserByUserID(userID string) (*models.User, error)
+	GetUserByUserID(userId string) (*models.User, error)
 }
 
 type userRepository struct{}
@@ -19,10 +19,10 @@ func NewUserRepository() UserRepository {
 	return &userRepository{}
 }
 
-func (r *userRepository) GetUserByUserID(userID string) (*models.User, error) {
+func (r *userRepository) GetUserByUserID(userId string) (*models.User, error) {
 	var user models.User
 
-	objectId, err := primitive.ObjectIDFromHex(userID)
+	objectId, err := primitive.ObjectIDFromHex(userId)
 	if err != nil {
 		return nil, err
 	}

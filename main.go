@@ -20,12 +20,17 @@ func main() {
 
 	userRepo := repository.NewUserRepository()
 	userService := service.NewUserService(userRepo)
+
 	mostWatchIdnRepo := repository.NewWatchIDNRepository()
 	mostWatchIdnService := service.NewWatchIDNService(mostWatchIdnRepo, userRepo)
 	userHandler := handler.NewUserHandler(userService)
 	mostWatchIdnHandler := handler.NewWatchIDNHandler(mostWatchIdnService)
 
-	r := router.SetupRouter(userHandler, mostWatchIdnHandler)
+	watchShowroomRepo := repository.NewWatchShowroomRepository()
+	watchShowroomService := service.NewWatchShowroomService(watchShowroomRepo, userRepo)
+	watchShowroomHandler := handler.NewWatchShowroomHandler(watchShowroomService)
+
+	r := router.SetupRouter(userHandler, mostWatchIdnHandler, watchShowroomHandler)
 
 	log.Println("Server running on port 8080")
 	r.Run(":8080")
