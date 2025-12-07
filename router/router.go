@@ -5,7 +5,11 @@ import (
 	"github.com/ikhbaldwiyan/sr-wrapped-2025/handler"
 )
 
-func SetupRouter(userHandler *handler.UserHandler, mostWatchIdnHandler *handler.WatchIDNHandler, watchShowroomHandler *handler.WatchShowroomHandler) *gin.Engine {
+func SetupRouter(
+	userHandler *handler.UserHandler,
+	mostWatchIdnHandler *handler.WatchIDNHandler,
+	watchShowroomHandler *handler.WatchShowroomHandler,
+) *gin.Engine {
 	router := gin.Default()
 
 	router.GET("/users/:user_id", userHandler.GetUser)

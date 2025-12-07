@@ -17,6 +17,7 @@ func main() {
 	}
 
 	config.ConnectMongo()
+	config.SetupIndexes()
 
 	userRepo := repository.NewUserRepository()
 	userService := service.NewUserService(userRepo)
