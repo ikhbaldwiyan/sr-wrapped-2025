@@ -31,7 +31,9 @@ func main() {
 	watchShowroomService := service.NewWatchShowroomService(watchShowroomRepo, userRepo)
 	watchShowroomHandler := handler.NewWatchShowroomHandler(watchShowroomService)
 
-	r := router.SetupRouter(userHandler, mostWatchIdnHandler, watchShowroomHandler)
+	wrappedHandler := handler.NewWrappedHandler(mostWatchIdnService, watchShowroomService)
+
+	r := router.SetupRouter(userHandler, mostWatchIdnHandler, watchShowroomHandler, wrappedHandler)
 
 	log.Println("Server running on port 8080")
 	r.Run(":8080")
